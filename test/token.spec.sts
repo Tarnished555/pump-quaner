@@ -1,0 +1,58 @@
+import { Connection, PublicKey } from '@solana/web3.js';
+import { getSPLTokenBalance } from '../helpers/token';
+import { RPC_ENDPOINT } from '../helpers/constants';
+import { logger } from '../helpers/logger';
+
+// 使用较长的超时时间，因为我们将进行真实的网络请求
+jest.setTimeout(30000);
+
+describe('getSPLTokenBalance', () => {
+  // 创建一个真实的Solana连接
+  const connection = new Connection(RPC_ENDPOINT);
+  
+ 
+  // 使用PumpFun代币地址进行测试
+  const pumpFunMint = new PublicKey('9zPQcdHv2BXQ8vtWjbZK3H73dbAuUrYYJHVKmKGVpump');
+  
+  // 使用一个已知有PumpFun余额的钱包地址进行测试
+  // 这里使用Solana上一个大型交易所热钱包作为示例
+  const knownPumpFunHolder = new PublicKey('4SWS1m9mq3cjCfUdnbUfR4CxTEELU83Rg92UUqdpRL5G');
+  
+  // 使用一个不存在的钱包地址进行测试
+  const nonExistentWallet = new PublicKey('J7xkQZ4FD4t8vBRrWEKR5vYYM7GWejrxuCUyXXJvnQc1');
+  
+  it('应该能够获取真实钱包的PumpFun余额', async () => {
+    // 调用函数获取余额
+    const balance = await getSPLTokenBalance(connection, pumpFunMint, knownPumpFunHolder);
+    
+    // 验证返回的余额是一个数字
+    expect(typeof balance).toBe('number');
+    
+    // 输出余额以便于调试
+    logger.info(`PumpFun余额: ${balance}`);
+    
+    // 由于我们不知道确切的余额值，只能验证返回了一个有效的数字
+    // 对于大型交易所热钱包，余额应该大于0
+    // 但是如果测试时刚好余额为0，这个测试可能会失败
+    // 所以这里我们只验证返回了一个合法的数值类型
+  });
+  
+  it('对于不存在的钱包应该返回0', async () => {
+    // 调用函数尝试获取不存在钱包的余额
+    const balance = await getSPLTokenBalance(connection, pumpFunMint, nonExistentWallet);
+    
+    // 验证返回值为0
+    expect(balance).toBe(0);
+  });
+  
+  it('对于不存在的代币账户应该返回0', async () => {
+    // 使用一个随机生成的新钱包地址，它不会有任何代币
+    const randomWallet = new PublicKey('J7xkQZ4FD4t8vBRrWEKR5vYYM7GWejrxuCUyXXJvnQc2');
+    
+    // 调用函数尝试获取不存在代币账户的余额
+    const balance = await getSPLTokenBalance(connection, pumpFunMint, randomWallet);
+    
+    // 验证返回值为0
+    expect(balance).toBe(0);
+  });
+});

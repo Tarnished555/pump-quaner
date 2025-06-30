@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beyondpump Solana Trade Bot</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- Header -->
+    <header class="py-3 mb-3 border-bottom">
+      <h1 class="h4" style="color: #FF8C00;">Beyondpump Solana Trade Bot</h1>
+    </header>
+
+    <!-- Control Row 1: Inputs -->
+    <div class="row mb-3 align-items-end">
+      <div class="col-md-5">
+        <h4 class="card-title mb-0" style="color: #FF8C00;"><svg t="1743993624375" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2695" width="32" height="32"><path d="M512 64C264.8 64 64 264.8 64 512s200.8 448 448 448 448-200.8 448-448S759.2 64 512 64z m-16 831.2c-199.2-8-359.2-168.8-367.2-367.2h128C264.8 656.8 368 759.2 496 767.2v128z m0-192c-92.8-8-167.2-82.4-175.2-175.2h129.6c5.6 22.4 23.2 40 45.6 45.6v129.6z m0-252.8c-22.4 5.6-39.2 23.2-45.6 45.6H320.8c8-92.8 82.4-167.2 175.2-175.2v129.6z m0-193.6C367.2 264.8 264.8 368 256.8 496h-128c8-199.2 168.8-359.2 367.2-367.2v128z m32 64c17.6 1.6 34.4 5.6 49.6 11.2 4.8-22.4 17.6-41.6 35.2-55.2-26.4-11.2-55.2-18.4-84.8-20.8V128c92 4 176 40 240 97.6L722.4 272c8.8 5.6 17.6 12.8 24 21.6l44.8-44.8c61.6 64.8 100.8 152 104.8 247.2H768c-1.6-29.6-8.8-58.4-20-84.8-13.6 17.6-32.8 30.4-55.2 35.2 5.6 16 9.6 32 11.2 49.6H574.4c-2.4-8-5.6-14.4-10.4-20.8l47.2-47.2c-8-6.4-15.2-15.2-21.6-24l-50.4 50.4c-4-1.6-7.2-3.2-12-4V320.8z m0 253.6c22.4-5.6 40.8-23.2 46.4-46.4h128.8c-8 92.8-82.4 167.2-175.2 175.2V574.4z m0 320.8v-128C656.8 759.2 759.2 656 767.2 528h128c-8 199.2-168 359.2-367.2 367.2z m143.2-478.4c-35.2 0-64-28.8-64-64s28.8-64 64-64 64 28.8 64 64-28.8 64-64 64z" p-id="2696" fill="#FF8C00"></path></svg>监控钱包</h5>
+
+        <select id="walletAddressSelect" class="form-select" aria-label="选择钱包地址">
+          <option selected disabled>选择监控钱包...</option>
+        </select>
+      </div>
+
+    </div>
+
+
+
+    <!-- Status Row -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div id="statusMessage" class="alert alert-info">请输入代币地址并点击加载按钮</div>
+      </div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row">
+      <!-- Left Column: Token Info -->
+      <div class="col-md-8">
+        <!-- Token Info Card -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4 class="card-title mb-0" style="color: #FF8C00;"><i class="bi bi-coin me-2"></i>代币信息</h5>
+          </div>
+          <div class="card-body">
+            <div id="tokenInfo">
+              <!-- Row 1: Avatar & Name/Symbol -->
+              <div class="row mb-3 align-items-center">
+                  <div class="col-auto">
+                      <img id="tokenAvatar" src="" alt="" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; background-color: #eee;"> <!-- Start hidden -->
+                  </div>
+                  <div class="col">
+                      <h5 class="mb-0" id="tokenName">--</h5>
+                      <small class="text-muted" id="tokenSymbol">--</small>
+                  </div>
+              </div>
+
+              <!-- Data Rows -->
+              <div class="row mb-2">
+                <div class="col-md-6"><span>当前价格:</span><strong id="currentPrice" class="ms-2">$--</strong></div>
+                <div class="col-md-6"><span>市值:</span><strong id="marketCap" class="ms-2">$--</strong></div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-md-6"><span>24h 变化:</span><strong id="priceChange24h" class="ms-2">--%</strong></div>
+                <div class="col-md-6"><span>24h 成交量:</span><strong id="volume24h" class="ms-2">$--</strong></div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-md-6"><span>创建时间:</span><strong id="pairCreatedAt" class="ms-2">--</strong></div>
+                <div class="col-md-6"><span>社交媒体:</span><span id="socials" class="ms-2">--</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Trades Card (Moved from right column) -->
+        <div class="card mt-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0" style="color: #FF8C00;"><i class="bi bi-arrow-left-right me-2"></i>最新交易</h5>
+            <small id="tradesWalletAddress" class="text-muted"></small>
+          </div>
+          <div class="card-body p-0">
+            <div id="recentTrades" class="list-group list-group-flush">
+              <div class="list-group-item">
+                 请选择一个监控钱包以查看其交易记录。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Log Output Card -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h4 class="card-title mb-0" style="color: #FF8C00;"><i class="bi bi-terminal me-2"></i>后端实时日志</h5>
+          </div>
+          <div class="card-body">
+            <pre id="logOutput" style="height: 600px; overflow-y: scroll; background-color: #000000; color: #00ff00; border: 1px solid #333; padding: 10px; margin-bottom: 0; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; font-size: 125%;"></pre>
+          </div>
+        </div> <!-- End Log Output Card -->
+
+      </div> <!-- End Left Column -->
+
+      <!-- Right Column: Wallet Portfolio & Recent Trades -->
+      <div class="col-md-4">
+        <!-- Wallet Portfolio Card -->
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0" style="color: #FF8C00;"><i class="bi bi-wallet2 me-2"></i>钱包资产</h5>
+            <small id="portfolioWalletAddress" class="text-muted"></small> <!-- To show selected wallet -->
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive"> <!-- Added for small screens -->
+              <table class="table table-hover mb-0"> <!-- Changed to table -->
+                <thead>
+                  <tr>
+
+                  </tr>
+                </thead>
+                <tbody id="walletPortfolioBody"> <!-- Target for JS -->
+                  <!-- Portfolio rows will be loaded here by app.js -->
+                  <tr id="portfolio-loading-row">
+                    <td colspan="4" class="text-center text-muted p-3" id="portfolio-loading">请选择一个监控钱包以查看其资产。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Trades Card moved to left column -->
+      </div>
+    </div>
+
+  </div> <!-- End Container -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial/dist/chartjs-chart-financial.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

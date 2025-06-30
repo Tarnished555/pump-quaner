@@ -1,0 +1,103 @@
+import { pumpSwap, LookupTablesConfig } from '../tokenCreateAndBuy';
+import { PumpFunSDK } from '../pumpfun-sdk/pumpfun';
+import { PublicKey, Keypair, BlockhashWithExpiryBlockHeight, AddressLookupTableAccount } from '@solana/web3.js';
+import axios from 'axios';
+
+// 只模拟axios，因为我们不想发送真实的网络请求
+jest.mock('axios');
+
+// 定义测试用例
+describe('pumpSwap 函数测试', () => {
+  // 设置较长的超时时间，因为函数执行可能需要时间
+  jest.setTimeout(30000);
+  
+  // 定义测试数据
+  let mockSdk: any;
+  let mockMint: PublicKey;
+  let mockPayer: Keypair;
+  let mockWalletNames: Keypair[];
+  let mockBlockhash: BlockhashWithExpiryBlockHeight;
+  let mockLookupTablesConfig: LookupTablesConfig;
+  
+  beforeEach(() => {
+    // 创建测试数据
+    mockMint = new PublicKey('7ZRgHFqwdzvqhfmg19rSQBD6CZe5iEDkuZoaNUhpump');
+    mockPayer = Keypair.generate();
+    mockWalletNames = [Keypair.generate(), Keypair.generate()];
+    
+    mockBlockhash = {
+      blockhash: 'EkSnNWid2cvwEVnVx9aBqawnmiCNiDgp3gUdkDPTKN1N',
+      lastValidBlockHeight: 100,
+    };
+    
+    // 创建模拟的SDK
+    mockSdk = {
+      getBuyInstructionsBySolAmount: jest.fn().mockResolvedValue({
+        instructions: []
+      })
+    };
+    
+    // 创建模拟的lookup tables配置
+    mockLookupTablesConfig = {
+      defaultLookupTableAccounts: {} as AddressLookupTableAccount,
+      customLookupTableAccounts: {} as AddressLookupTableAccount,
+      addressesFromDefaultLookupTable: [],
+      addressesFromCustomLookupTable: [],
+    };
+    
+    // 设置axios的模拟响应
+    (axios.post as jest.Mock).mockResolvedValue({
+      data: {
+        result: 'mockSignature',
+        jsonrpc: '2.0',
+        id: 1
+      }
+    });
+  });
+  
+  // 测试函数的错误处理能力
+  it('当SDK调用失败时应该返回错误结果', async () => {
+    // 设置SDK方法抛出错误
+    mockSdk.getBuyInstructionsBySolAmount.mockRejectedValue(new Error('SDK调用失败'));
+    
+    // 调用pumpSwap函数
+    const result = await pumpSwap(
+      mockSdk as unknown as PumpFunSDK,
+      mockBlockhash,
+      0.1, // buyAmountSol
+      0.001, // jitoTip
+      mockMint,
+      mockPayer,
+      mockWalletNames,
+      5.0, // buySlippage
+      mockLookupTablesConfig
+    );
+    
+    // 验证结果
+    expect(result.confirmed).toBe(false);
+    expect(result.error).toBeDefined();
+  });
+  
+  // 测试函数的API调用错误处理
+  it('当API调用失败时应该返回错误结果', async () => {
+    // 设置axios抛出错误
+    (axios.post as jest.Mock).mockRejectedValue(new Error('API调用失败'));
+    
+    // 调用pumpSwap函数
+    const result = await pumpSwap(
+      mockSdk as unknown as PumpFunSDK,
+      mockBlockhash,
+      0.1,
+      0.001,
+      mockMint,
+      mockPayer,
+      mockWalletNames,
+      5.0,
+      mockLookupTablesConfig
+    );
+    
+    // 验证结果
+    expect(result.confirmed).toBe(false);
+    expect(result.error).toBeDefined();
+  });
+});

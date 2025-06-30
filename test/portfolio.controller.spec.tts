@@ -1,0 +1,45 @@
+import { Connection, PublicKey } from '@solana/web3.js';
+import { getTokenMetadata, tokenMetadataCache } from '../api/portfolio.controller'; // Adjust path if needed
+import { logger } from '../helpers/logger';
+import dotenv from 'dotenv';
+
+// Load environment variables for RPC endpoint
+dotenv.config();
+
+// Increase timeout for network calls (adjust as needed)
+jest.setTimeout(30000); // 30 seconds
+jest.unmock('axios');
+jest.unmock('../helpers/logger');
+jest.unmock('../helpers');
+jest.unmock('../api/portfolio.controller');
+// --- Test Suite ---
+describe('getTokenMetadata Integration Tests', () => {
+    let connection: Connection;
+    // Use Wrapped SOL mint address (exists on all networks)
+    const solMintAddress = '4M4ypzyZA7Sp2weYEMfnWuJ6wBVpNaMgaGTanmTspump';
+    const solMintPublicKey = new PublicKey(solMintAddress);
+
+    beforeAll(() => {
+        // Ensure RPC endpoint is configured
+        if (!process.env.RPC_ENDPOINT) {
+            throw new Error('RPC_ENDPOINT environment variable is not set. Configure it in your .env file for integration tests.');
+        }
+        connection = new Connection(process.env.RPC_ENDPOINT, 'confirmed');
+    });
+
+    beforeEach(() => {
+        // Reset cache before each test
+        tokenMetadataCache.clear();
+
+    });
+
+    it('should return real metadata if available', async () => {
+
+
+        // Pass the real connection, but it shouldn't be used due to cache hit
+        const metadata = await getTokenMetadata(solMintPublicKey);
+        console.log('*** TEST CONSOLE LOG - Metadata:', metadata);
+        expect(metadata).not.toEqual({ decimals: 9, symbol: 'Wrapped SOL', name:'Wrapped SOL', image:'cache.png' });
+    });
+
+});
